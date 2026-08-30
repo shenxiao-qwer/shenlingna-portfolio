@@ -58,6 +58,7 @@
 
       .hero-fallback {
         opacity: 0;
+        pointer-events: none;
       }
 
       .hero.video-failed .hero-fallback {
@@ -499,8 +500,8 @@
   <body>
     <main>
       <section class="hero" id="home" aria-label="Home">
-        <video class="hero-video" src="assets/home-bg.mp4" poster="assets/home-bg-poster.jpg" autoplay muted loop playsinline preload="auto"></video>
-        <img class="hero-fallback" src="assets/home-bg-poster.jpg" alt="" />
+        <video class="hero-video" src="assets/home-bg.mp4" poster="assets/home-bg-poster.jpg" autoplay muted loop playsinline webkit-playsinline preload="auto"></video>
+        <img class="hero-fallback" src="assets/home-bg-motion.webp" alt="" />
         <div class="hero-content">
           <div class="hero-title">
             <p class="hero-kicker">Design by Shenlingna.</p>
@@ -620,8 +621,36 @@
         hero.classList.add("video-failed");
       });
 
-      video.muted = true;
-      video.play().catch(() => {});
+      video.addEventListener("playing", () => {
+        hero.classList.remove("video-failed");
+      });
+
+      const playHeroVideo = () => {
+        video.muted = true;
+        video.defaultMuted = true;
+        video.autoplay = true;
+        video.loop = true;
+        video.playsInline = true;
+        video.setAttribute("muted", "");
+        video.setAttribute("playsinline", "");
+        video.setAttribute("webkit-playsinline", "");
+        video.play().catch(() => {});
+      };
+
+      video.addEventListener("loadeddata", playHeroVideo);
+      video.addEventListener("canplay", playHeroVideo);
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) playHeroVideo();
+      });
+      window.addEventListener("pageshow", playHeroVideo);
+      window.addEventListener("pointerdown", playHeroVideo, { passive: true });
+      window.addEventListener("touchstart", playHeroVideo, { passive: true });
+      playHeroVideo();
+      setTimeout(() => {
+        if (video.paused || video.readyState < 2) {
+          hero.classList.add("video-failed");
+        }
+      }, 1200);
 
       const observer = new IntersectionObserver(
         (entries) => {
