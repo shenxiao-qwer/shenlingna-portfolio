@@ -1,0 +1,11 @@
+node_modules/
+dist/
+outputs/
+tools/
+work/
+
+.DS_Store
+Thumbs.db
+
+# Temporary compressed media copies; the site uses the original asset names.
+public/assets/*-pages.mp4
