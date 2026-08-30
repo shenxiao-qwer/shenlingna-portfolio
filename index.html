@@ -499,8 +499,8 @@
   <body>
     <main>
       <section class="hero" id="home" aria-label="Home">
-        <video class="hero-video" src="assets/home-bg.mp4" autoplay muted loop playsinline preload="auto"></video>
-        <img class="hero-fallback" src="assets/hero-bg.png" alt="" />
+        <video class="hero-video" src="assets/home-bg.mp4" poster="assets/home-bg-poster.jpg" autoplay muted loop playsinline preload="auto"></video>
+        <img class="hero-fallback" src="assets/home-bg-poster.jpg" alt="" />
         <div class="hero-content">
           <div class="hero-title">
             <p class="hero-kicker">Design by Shenlingna.</p>
@@ -619,9 +619,7 @@
         hero.classList.add("video-failed");
       });
 
-      video.play().catch(() => {
-        hero.classList.add("video-failed");
-      });
+      video.play().catch(() => {});
 
       const enableHeroSound = () => {
         video.muted = false;
