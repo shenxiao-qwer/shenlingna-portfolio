@@ -619,20 +619,8 @@
         hero.classList.add("video-failed");
       });
 
+      video.muted = true;
       video.play().catch(() => {});
-
-      const enableHeroSound = () => {
-        video.muted = false;
-        video.volume = 1;
-        video.play().catch(() => {});
-        window.removeEventListener("pointerdown", enableHeroSound);
-        window.removeEventListener("touchstart", enableHeroSound);
-        window.removeEventListener("keydown", enableHeroSound);
-      };
-
-      window.addEventListener("pointerdown", enableHeroSound, { once: true });
-      window.addEventListener("touchstart", enableHeroSound, { once: true });
-      window.addEventListener("keydown", enableHeroSound, { once: true });
 
       const observer = new IntersectionObserver(
         (entries) => {
@@ -652,6 +640,7 @@
         const project = projects[key];
         if (!project) return;
         modalPanel.scrollTop = 0;
+        video.muted = true;
         if (activeVideo) {
           activeVideo.pause();
           activeVideo = null;
