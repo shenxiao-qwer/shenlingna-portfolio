@@ -614,6 +614,7 @@
       const modalMedia = document.querySelector(".modal-media");
       const closeButton = document.querySelector(".modal-close");
       let activeVideo = null;
+      let modalHistoryPushed = false;
 
       video.addEventListener("error", () => {
         hero.classList.add("video-failed");
@@ -639,6 +640,7 @@
       function openProject(key) {
         const project = projects[key];
         if (!project) return;
+        const wasOpen = modal.classList.contains("is-open");
         modalPanel.scrollTop = 0;
         video.muted = true;
         if (activeVideo) {
@@ -668,10 +670,15 @@
         modal.classList.add("is-open");
         modal.setAttribute("aria-hidden", "false");
         document.body.classList.add("modal-open");
+        if (!wasOpen) {
+          history.pushState({ projectModal: key }, "", location.href);
+          modalHistoryPushed = true;
+        }
         closeButton.focus();
       }
 
-      function closeProject() {
+      function closeProject(fromHistory = false) {
+        if (!modal.classList.contains("is-open")) return;
         modal.classList.remove("is-open");
         modal.setAttribute("aria-hidden", "true");
         document.body.classList.remove("modal-open");
@@ -680,6 +687,10 @@
           activeVideo = null;
         }
         modalMedia.replaceChildren();
+        if (!fromHistory && modalHistoryPushed) {
+          modalHistoryPushed = false;
+          history.back();
+        }
       }
 
       document.querySelectorAll(".project-card").forEach((card) => {
@@ -689,6 +700,12 @@
       closeButton.addEventListener("click", closeProject);
       modal.addEventListener("click", (event) => {
         if (event.target === modal) closeProject();
+      });
+      window.addEventListener("popstate", () => {
+        if (modal.classList.contains("is-open")) {
+          modalHistoryPushed = false;
+          closeProject(true);
+        }
       });
       window.addEventListener("keydown", (event) => {
         if (event.key === "Escape") closeProject();
