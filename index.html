@@ -623,6 +623,19 @@
         hero.classList.add("video-failed");
       });
 
+      const enableHeroSound = () => {
+        video.muted = false;
+        video.volume = 1;
+        video.play().catch(() => {});
+        window.removeEventListener("pointerdown", enableHeroSound);
+        window.removeEventListener("touchstart", enableHeroSound);
+        window.removeEventListener("keydown", enableHeroSound);
+      };
+
+      window.addEventListener("pointerdown", enableHeroSound, { once: true });
+      window.addEventListener("touchstart", enableHeroSound, { once: true });
+      window.addEventListener("keydown", enableHeroSound, { once: true });
+
       const observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
@@ -653,6 +666,8 @@
           detailVideo.controls = true;
           detailVideo.playsInline = true;
           detailVideo.autoplay = true;
+          detailVideo.muted = false;
+          detailVideo.volume = 1;
           modalMedia.append(detailVideo);
           activeVideo = detailVideo;
           detailVideo.play().catch(() => {});

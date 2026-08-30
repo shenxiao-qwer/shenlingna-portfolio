@@ -9,3 +9,4 @@ Thumbs.db
 
 # Temporary compressed media copies; the site uses the original asset names.
 public/assets/*-pages.mp4
+public/assets/*-audio.mp4
